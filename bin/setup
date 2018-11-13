@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e
+
+setup_venv() {
+    if [ -d venv ]; then
+        python3 -m venv ./venv
+    fi
+}
+
+
+fetch_submodules() {
+    git submodule init
+    git submodule update
+}
+
+install_bokeh() {
+    (cd bokeh-src/bokehjs &&
+        npm install)
+    (cd bokeh-src &&
+        python setup.py develop --build-js)
+}
+
+main() {
+    setup_venv
+    fetch_submodules
+    install_bokeh
+}
+
+main
