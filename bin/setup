@@ -17,8 +17,13 @@ fetch_submodules() {
 install_bokeh() {
     (cd bokeh-src/bokehjs &&
         npm install)
+    install_python_dependencies
     (cd bokeh-src &&
-        python setup.py develop)
+        ../venv/bin/python setup.py develop)
+}
+
+install_python_dependencies() {
+    ./venv/bin/python -m pip install -U pip wheel
 }
 
 main() {
