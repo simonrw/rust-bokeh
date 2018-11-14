@@ -1,5 +1,5 @@
 [package]
-name = "go-bokeh"
+name = "rust-bokeh"
 version = "0.1.0"
 authors = ["Simon Walker <s.r.walker101@googlemail.com>"]
 edition = "2018"
@@ -8,3 +8,7 @@ edition = "2018"
 serde = "1.0.80"
 serde_derive = "1.0.80"
 serde_json = "1.0.33"
+askama = "0.7.2"
+
+[build-dependencies]
+askama = "0.7.2"
