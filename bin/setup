@@ -18,7 +18,7 @@ install_bokeh() {
     (cd bokeh-src/bokehjs &&
         npm install)
     (cd bokeh-src &&
-        python setup.py develop --build-js)
+        python setup.py develop)
 }
 
 main() {
