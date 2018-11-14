@@ -10,3 +10,7 @@ bokeh. This helps with working out what JSON schema we need.
 ## Building
 
 `cargo build [--release]`
+
+## Testing
+
+`cargo test`
