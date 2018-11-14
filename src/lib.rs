@@ -4,6 +4,10 @@ use askama::Template;
 
 type Guid = String;
 
+mod models {
+    include!(concat!(env!("OUT_DIR"), "/models.rs"));
+}
+
 // Rendering the output HTML
 #[derive(Template)]
 #[template(path = "index.html")]
