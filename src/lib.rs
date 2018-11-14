@@ -1,3 +1,5 @@
+extern crate askama;
+
 use askama::Template;
 
 // Rendering the output HTML
