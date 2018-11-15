@@ -86,10 +86,21 @@ impl ModelDefinition {
                 assert!(p.is_object());
                 let p = p.as_object().unwrap();
                 let name = ident(p["name"].as_str().unwrap());
+                let typ = p["type"].as_str().unwrap();
+                let converted_type = self.parse_type(typ);
+
                 quote! {
-                    #name: String,
+                    #name: #converted_type,
                 }
             }).collect())
+    }
+
+    fn parse_type(&self, typ: &str) -> Ident {
+        if typ.starts_with("Dict") {
+            ident("u32")
+        } else {
+            ident("String")
+        }
     }
 }
 
