@@ -2,7 +2,7 @@ extern crate askama;
 
 use askama::Template;
 
-mod models {
+pub mod models {
     include!(concat!(env!("OUT_DIR"), "/models.rs"));
 }
 

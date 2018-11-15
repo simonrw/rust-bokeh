@@ -38,7 +38,7 @@ where
 
     for (class_name, body) in d.iter() {
         let model_definition = ModelDefinition::new(class_name, body);
-        writeln!(output_file, "{}", model_definition.into_token_stream());
+        writeln!(output_file, "{}", model_definition.into_token_stream()?);
     }
     Ok(())
 }
@@ -56,18 +56,46 @@ impl ModelDefinition {
         }
     }
 
-    fn into_token_stream(self) -> TokenStream {
+    fn into_token_stream(self) -> Result<TokenStream> {
         let class_name = self.class_name();
+        let props = self.props()?;
 
         // The final compilation of the model
-        quote! {
-            struct #class_name;
+        Ok(quote! {
+            #[derive(Debug, Clone, Default)]
+            pub struct #class_name {
+                #(#props)*
+            }
 
             impl #class_name {}
-        }
+        })
     }
 
     fn class_name(&self) -> Ident {
-        Ident::new(&self.name, Span::call_site())
+        ident(&self.name)
     }
+
+    fn props(&self) -> Result<Vec<TokenStream>> {
+        let props = &self.body["props"];
+        assert!(props.is_array());
+        let props: &Vec<_> = props.as_array().unwrap();
+
+        Ok(props
+            .iter()
+            .map(|p| {
+                assert!(p.is_object());
+                let p = p.as_object().unwrap();
+                let name = ident(p["name"].as_str().unwrap());
+                quote! {
+                    #name: String,
+                }
+            }).collect())
+    }
+}
+
+fn ident<S>(txt: S) -> Ident
+where
+    S: AsRef<str>,
+{
+    Ident::new(txt.as_ref(), Span::call_site())
 }
