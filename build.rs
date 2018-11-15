@@ -59,8 +59,11 @@ impl ModelDefinition {
     fn into_token_stream(self) -> TokenStream {
         let class_name = self.class_name();
 
+        // The final compilation of the model
         quote! {
             struct #class_name;
+
+            impl #class_name {}
         }
     }
 

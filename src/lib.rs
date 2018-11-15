@@ -2,6 +2,10 @@ extern crate askama;
 
 use askama::Template;
 
+mod models {
+    include!(concat!(env!("OUT_DIR"), "/models.rs"));
+}
+
 type Guid = String;
 
 // Rendering the output HTML
