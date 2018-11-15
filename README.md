@@ -1,5 +1,7 @@
 # rust-bokeh
 
+[![pipeline status](https://gitlab.com/srwalker101/rust-bokeh/badges/dev/pipeline.svg)](https://gitlab.com/srwalker101/rust-bokeh/commits/dev)
+
 Bokeh-compatible Rust plotting library
 
 ## Setup instructions
