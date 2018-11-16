@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+main() {
+    # Test buildlib first
+    (cd buildlib &&
+        cargo test)
+
+    # Then test main crate
+    cargo test
+}
+
+main

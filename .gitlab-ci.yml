@@ -21,11 +21,11 @@ image: "rust:latest"
 test:
   script:
   - rustc --version && cargo --version      # Print version info for debugging
-  - cargo test --all
+  - bash ./bin/test
 
 formatting:
   before_script:
   - rustup component add rustfmt-preview
   script:
   - rustc --version && cargo --version      # Print version info for debugging
-  - cargo fmt -- --check
+  - bash ./bin/check-formatting
