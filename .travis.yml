@@ -16,6 +16,8 @@ jobs:
       script: bash ./bin/check-formatting
       rust: stable
 
+script: bash ./bin/test
+
 matrix:
   allow_failures:
     - rust: nightly
