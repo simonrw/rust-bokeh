@@ -14,8 +14,7 @@ jobs:
     - stage: formatting
       install: rustup component add rustfmt-preview
       script: bash ./bin/check-formatting
-    - stage: test
-      script: bash ./bin/test
+      rust: stable
 
 matrix:
   allow_failures:
