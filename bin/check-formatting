@@ -3,7 +3,7 @@
 set -ex
 
 main() {
-    cargo fmt -- --check
+    cargo fmt --all -- --check
 }
 
 main
