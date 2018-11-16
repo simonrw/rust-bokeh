@@ -10,11 +10,12 @@ stages:
   - test
 
 jobs:
-  - stage: formatting
-    install: rustup component add rustfmt-preview
-    script: bash ./bin/check-formatting
-  - stage: test
-    script: bash ./bin/test
+  include:
+    - stage: formatting
+      install: rustup component add rustfmt-preview
+      script: bash ./bin/check-formatting
+    - stage: test
+      script: bash ./bin/test
 
 matrix:
   allow_failures:
