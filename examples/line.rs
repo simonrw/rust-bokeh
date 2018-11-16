@@ -1,6 +1,8 @@
 extern crate rust_bokeh;
 
 fn main() {
+    // TODO: target api
+    /*
     let mut p = rust_bokeh::FigureBuilder::new()
         .build()
         .expect("Building figure");
@@ -11,4 +13,5 @@ fn main() {
     p.circle(xdata, ydata);
 
     rust_bokeh::to_file(p, "/tmp/out.html").expect("Rendering HTML");
+    */
 }
