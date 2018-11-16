@@ -1,0 +1,24 @@
+language: rust
+
+rust:
+  - stable
+  - beta
+  - nightly
+
+stages:
+  - formatting
+  - test
+
+jobs:
+  include:
+    - stage: formatting
+      install: rustup component add rustfmt-preview
+      script: bash ./bin/check-formatting
+      rust: stable
+
+script: bash ./bin/test
+
+matrix:
+  allow_failures:
+    - rust: nightly
+  fast_finish: true

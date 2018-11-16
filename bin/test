@@ -3,7 +3,7 @@
 set -ex
 
 main() {
-    cargo test
+    cargo test --all
 }
 
 main
