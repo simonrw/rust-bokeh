@@ -13,8 +13,8 @@ fn main() {
     let y: Vec<_> = x.iter().map(|xval| xval.sin()).collect();
 
     let mut source = ColumnDataSource::new();
-    source.add("x", &x);
-    source.add("y", &y);
+    source.add("x", x);
+    source.add("y", y);
 
     /* TODO
     let mut source = column_data_source! {
