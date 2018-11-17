@@ -33,7 +33,7 @@ fn main() {
     circle.size = Some(5);
     circle.line_color = Some("black".to_string());
 
-    plot.add_glyph(&source, &circle);
+    plot.add_glyph(&source, circle);
 
     plot.add_layout(LinearAxis::new(), "below");
     plot.add_layout(LinearAxis::new(), "left");
