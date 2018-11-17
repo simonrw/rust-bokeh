@@ -1,9 +1,12 @@
 extern crate bokeh_models;
 
 use bokeh_models::document::Document;
+use bokeh_models::embed::file_html;
 use bokeh_models::glyphs::Circle;
 use bokeh_models::{ColumnDataSource, LinearAxis, PanTool, Plot, WheelZoomTool};
 use std::f64::consts;
+use std::fs::File;
+use std::io::Write;
 
 fn main() {
     // Build the data set
@@ -42,5 +45,14 @@ fn main() {
     plot.add_tool(WheelZoomTool::new());
 
     let mut doc = Document::new();
-    doc.add_root(&plot);
+    doc.add_root(plot);
+
+    if let Err(e) = doc.validate() {
+        panic!("Error validating plot: {:?}", e);
+    }
+
+    let filename = "/tmp/basic_plot.html";
+    let mut f = File::create(filename).expect("creating output file");
+    write!(f, "{}", file_html(&doc, "Basic Glyph Plot")).expect("writing file contents");
+    println!("Wrote {}", filename);
 }
