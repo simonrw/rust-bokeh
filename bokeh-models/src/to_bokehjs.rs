@@ -46,10 +46,51 @@ mod tests {
         assert_eq!(json_str, "null");
     }
 
-    fn compare_json(s1: &str, s2: &str) -> bool {
-        let v1: Value = serde_json::from_str(s1).unwrap();
-        let v2: Value = serde_json::from_str(s2).unwrap();
-        v1 == v2
+    trait ToValue {
+        fn to_value(&self) -> Value;
+    }
+
+    impl ToValue for Value {
+        fn to_value(&self) -> Value {
+            self.clone()
+        }
+    }
+
+    impl<'a> ToValue for &'a Value {
+        fn to_value(&self) -> Value {
+            (*self).clone()
+        }
+    }
+
+    impl<'a> ToValue for &'a str {
+        fn to_value(&self) -> Value {
+            serde_json::from_str(self).unwrap()
+        }
+    }
+
+    impl ToValue for String {
+        fn to_value(&self) -> Value {
+            serde_json::from_str(self).unwrap()
+        }
+    }
+
+    impl<'a> ToValue for &'a String {
+        fn to_value(&self) -> Value {
+            serde_json::from_str(self).unwrap()
+        }
+    }
+
+    use std::fmt::Display;
+
+    // Helper macro to compare JSON strings
+    fn compare_json<A, B>(s1: A, s2: B)
+    where
+        A: ToValue + Display,
+        B: ToValue + Display,
+    {
+        let v1: Value = s1.to_value();
+        let v2: Value = s2.to_value();
+        assert!(v1 == v2, "{} != {}", s1, s2);
     }
 
     #[test]
@@ -57,7 +98,6 @@ mod tests {
         let t = BasicTickFormatter::default();
 
         let json = t.to_json();
-        let json_str = serde_json::to_string(&json).unwrap();
-        assert!(compare_json(&json_str, "{\"id\": \"1363\", \"js_event_callbacks\": {}, \"js_property_callbacks\": {}, \"name\": null, \"power_limit_high\": 5, \"power_limit_low\": -3, \"precision\": \"auto\", \"subscribed_events\": [], \"tags\": [], \"use_scientific\": true}"));
+        compare_json(&json, "{\"id\": \"1363\", \"js_event_callbacks\": {}, \"js_property_callbacks\": {}, \"name\": null, \"power_limit_high\": 5, \"power_limit_low\": -3, \"precision\": \"auto\", \"subscribed_events\": [], \"tags\": [], \"use_scientific\": true}");
     }
 }
