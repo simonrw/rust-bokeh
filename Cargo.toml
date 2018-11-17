@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "bokeh-api",
-    "bokeh-highlevel",
+    "bokeh-models",
+    "bokeh-plotting",
     ]
