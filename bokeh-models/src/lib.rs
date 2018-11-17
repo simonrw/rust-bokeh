@@ -1,5 +1,7 @@
 extern crate serde_json;
 
+mod to_bokehjs;
+
 #[cfg(test)]
 mod tests {
     #[test]
