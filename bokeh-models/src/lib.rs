@@ -6,6 +6,7 @@ mod datasource;
 pub mod document;
 pub mod embed;
 pub mod glyphs;
+mod idgen;
 mod layout;
 mod plot;
 mod to_bokehjs;

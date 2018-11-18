@@ -3,8 +3,28 @@
     "references": [
       {
         "attributes": {},
+        "id": "1022",
+        "type": "Selection"
+      },
+      {
+        "attributes": {},
         "id": "1013",
         "type": "LinearScale"
+      },
+      {
+        "attributes": {},
+        "id": "1023",
+        "type": "UnionRenderers"
+      },
+      {
+        "attributes": {},
+        "id": "1014",
+        "type": "LinearScale"
+      },
+      {
+        "attributes": {},
+        "id": "1008",
+        "type": "PanTool"
       },
       {
         "attributes": {
@@ -21,34 +41,6 @@
             "type": "BasicTicker"
           }
         },
-        "id": "1006",
-        "type": "LinearAxis"
-      },
-      {
-        "attributes": {},
-        "id": "1015",
-        "type": "LinearScale"
-      },
-      {
-        "attributes": {},
-        "id": "1008",
-        "type": "PanTool"
-      },
-      {
-        "attributes": {
-          "formatter": {
-            "id": "1020",
-            "type": "BasicTickFormatter"
-          },
-          "plot": {
-            "id": "1002",
-            "type": "Plot"
-          },
-          "ticker": {
-            "id": "1021",
-            "type": "BasicTicker"
-          }
-        },
         "id": "1007",
         "type": "LinearAxis"
       },
@@ -56,98 +48,8 @@
         "attributes": {
           "callback": null
         },
-        "id": "1016",
+        "id": "1015",
         "type": "DataRange1d"
-      },
-      {
-        "attributes": {
-          "active_drag": "auto",
-          "active_inspect": "auto",
-          "active_multi": null,
-          "active_scroll": "auto",
-          "active_tap": "auto",
-          "tools": [
-            {
-              "id": "1008",
-              "type": "PanTool"
-            },
-            {
-              "id": "1009",
-              "type": "WheelZoomTool"
-            }
-          ]
-        },
-        "id": "1010",
-        "type": "Toolbar"
-      },
-      {
-        "attributes": {},
-        "id": "1018",
-        "type": "BasicTickFormatter"
-      },
-      {
-        "attributes": {},
-        "id": "1019",
-        "type": "BasicTicker"
-      },
-      {
-        "attributes": {},
-        "id": "1009",
-        "type": "WheelZoomTool"
-      },
-      {
-        "attributes": {},
-        "id": "1020",
-        "type": "BasicTickFormatter"
-      },
-      {
-        "attributes": {
-          "plot": null,
-          "text": ""
-        },
-        "id": "1014",
-        "type": "Title"
-      },
-      {
-        "attributes": {},
-        "id": "1021",
-        "type": "BasicTicker"
-      },
-      {
-        "attributes": {
-          "fill_color": {
-            "value": "red"
-          },
-          "size": {
-            "units": "screen",
-            "value": 5
-          },
-          "x": {
-            "field": "x"
-          },
-          "y": {
-            "field": "y"
-          }
-        },
-        "id": "1003",
-        "type": "Circle"
-      },
-      {
-        "attributes": {},
-        "id": "1022",
-        "type": "Selection"
-      },
-      {
-        "attributes": {
-          "callback": null
-        },
-        "id": "1012",
-        "type": "DataRange1d"
-      },
-      {
-        "attributes": {},
-        "id": "1023",
-        "type": "UnionRenderers"
       },
       {
         "attributes": {
@@ -182,6 +84,33 @@
       },
       {
         "attributes": {
+          "fill_color": {
+            "value": "red"
+          },
+          "size": {
+            "units": "screen",
+            "value": 5
+          },
+          "x": {
+            "field": "x"
+          },
+          "y": {
+            "field": "y"
+          }
+        },
+        "id": "1003",
+        "type": "Circle"
+      },
+      {
+        "attributes": {
+          "plot": null,
+          "text": ""
+        },
+        "id": "1016",
+        "type": "Title"
+      },
+      {
+        "attributes": {
           "source": {
             "id": "1001",
             "type": "ColumnDataSource"
@@ -189,6 +118,36 @@
         },
         "id": "1005",
         "type": "CDSView"
+      },
+      {
+        "attributes": {},
+        "id": "1009",
+        "type": "WheelZoomTool"
+      },
+      {
+        "attributes": {
+          "formatter": {
+            "id": "1020",
+            "type": "BasicTickFormatter"
+          },
+          "plot": {
+            "id": "1002",
+            "type": "Plot"
+          },
+          "ticker": {
+            "id": "1021",
+            "type": "BasicTicker"
+          }
+        },
+        "id": "1006",
+        "type": "LinearAxis"
+      },
+      {
+        "attributes": {
+          "callback": null
+        },
+        "id": "1017",
+        "type": "DataRange1d"
       },
       {
         "attributes": {
@@ -220,7 +179,7 @@
             }
           ],
           "title": {
-            "id": "1014",
+            "id": "1016",
             "type": "Title"
           },
           "toolbar": {
@@ -228,24 +187,34 @@
             "type": "Toolbar"
           },
           "x_range": {
-            "id": "1016",
+            "id": "1017",
             "type": "DataRange1d"
           },
           "x_scale": {
-            "id": "1015",
+            "id": "1013",
             "type": "LinearScale"
           },
           "y_range": {
-            "id": "1012",
+            "id": "1015",
             "type": "DataRange1d"
           },
           "y_scale": {
-            "id": "1013",
+            "id": "1014",
             "type": "LinearScale"
           }
         },
         "id": "1002",
         "type": "Plot"
+      },
+      {
+        "attributes": {},
+        "id": "1018",
+        "type": "BasicTickFormatter"
+      },
+      {
+        "attributes": {},
+        "id": "1019",
+        "type": "BasicTicker"
       },
       {
         "attributes": {
@@ -266,6 +235,37 @@
         },
         "id": "1004",
         "type": "GlyphRenderer"
+      },
+      {
+        "attributes": {},
+        "id": "1020",
+        "type": "BasicTickFormatter"
+      },
+      {
+        "attributes": {
+          "active_drag": "auto",
+          "active_inspect": "auto",
+          "active_multi": null,
+          "active_scroll": "auto",
+          "active_tap": "auto",
+          "tools": [
+            {
+              "id": "1008",
+              "type": "PanTool"
+            },
+            {
+              "id": "1009",
+              "type": "WheelZoomTool"
+            }
+          ]
+        },
+        "id": "1010",
+        "type": "Toolbar"
+      },
+      {
+        "attributes": {},
+        "id": "1021",
+        "type": "BasicTicker"
       }
     ],
     "root_ids": [

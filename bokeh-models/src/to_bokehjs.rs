@@ -1,4 +1,5 @@
 use serde_json::Value;
+use std::fmt::Display;
 
 pub(crate) trait ToBokehJs {
     fn to_json(&self) -> Value;
@@ -24,6 +25,51 @@ impl ToBokehJs for BasicTickFormatter {
     }
 }
 
+pub(crate) trait ToValue {
+    fn to_value(&self) -> Value;
+}
+
+impl ToValue for Value {
+    fn to_value(&self) -> Value {
+        self.clone()
+    }
+}
+
+impl<'a> ToValue for &'a Value {
+    fn to_value(&self) -> Value {
+        (*self).clone()
+    }
+}
+
+impl<'a> ToValue for &'a str {
+    fn to_value(&self) -> Value {
+        serde_json::from_str(self).unwrap()
+    }
+}
+
+impl ToValue for String {
+    fn to_value(&self) -> Value {
+        serde_json::from_str(self).unwrap()
+    }
+}
+
+impl<'a> ToValue for &'a String {
+    fn to_value(&self) -> Value {
+        serde_json::from_str(self).unwrap()
+    }
+}
+
+// Helper function to compare JSON strings
+pub(crate) fn compare_json<A, B>(s1: A, s2: B)
+where
+    A: ToValue + Display,
+    B: ToValue + Display,
+{
+    let v1: Value = s1.to_value();
+    let v2: Value = s2.to_value();
+    assert!(v1 == v2, "{} != {}", s1, s2);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -44,53 +90,6 @@ mod tests {
         let json = Foo.to_json();
         let json_str = serde_json::to_string(&json).unwrap();
         assert_eq!(json_str, "null");
-    }
-
-    trait ToValue {
-        fn to_value(&self) -> Value;
-    }
-
-    impl ToValue for Value {
-        fn to_value(&self) -> Value {
-            self.clone()
-        }
-    }
-
-    impl<'a> ToValue for &'a Value {
-        fn to_value(&self) -> Value {
-            (*self).clone()
-        }
-    }
-
-    impl<'a> ToValue for &'a str {
-        fn to_value(&self) -> Value {
-            serde_json::from_str(self).unwrap()
-        }
-    }
-
-    impl ToValue for String {
-        fn to_value(&self) -> Value {
-            serde_json::from_str(self).unwrap()
-        }
-    }
-
-    impl<'a> ToValue for &'a String {
-        fn to_value(&self) -> Value {
-            serde_json::from_str(self).unwrap()
-        }
-    }
-
-    use std::fmt::Display;
-
-    // Helper macro to compare JSON strings
-    fn compare_json<A, B>(s1: A, s2: B)
-    where
-        A: ToValue + Display,
-        B: ToValue + Display,
-    {
-        let v1: Value = s1.to_value();
-        let v2: Value = s2.to_value();
-        assert!(v1 == v2, "{} != {}", s1, s2);
     }
 
     #[test]
