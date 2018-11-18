@@ -55,7 +55,7 @@ where
 {
     let v1: Value = s1.to_value();
     let v2: Value = s2.to_value();
-    assert!(v1 == v2, "{} != {}", s1, s2);
+    assert!(v1 == v2, "\n{:#}\nIS NOT EQUAL TO\n{:#}", v1, v2);
 }
 
 #[cfg(test)]
