@@ -4,6 +4,7 @@ extern crate serde_json;
 mod axes;
 mod datasource;
 pub mod document;
+pub mod embed;
 pub mod glyphs;
 mod layout;
 mod plot;
