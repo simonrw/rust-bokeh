@@ -1,4 +1,6 @@
 use super::plot::Root;
+use super::to_bokehjs::ToBokehJs;
+use serde_json::Value;
 
 #[derive(Debug)]
 pub enum ValidationError {}
@@ -22,5 +24,40 @@ impl Document {
 
     pub fn validate(&self) -> Result<(), ValidationError> {
         Ok(())
+    }
+}
+
+impl ToBokehJs for Document {
+    fn to_json(&self) -> Value {
+        let root_ids = match self.root {
+            Some(ref root) => vec![format!("{}", root.id())],
+            None => unimplemented!(),
+        };
+
+        json!({
+            "roots": {
+                "root_ids": root_ids,
+            },
+        })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::super::plot::Plot;
+    use super::*;
+
+    #[test]
+    fn test_document_root_ids() {
+        let plot = Plot::with_id(1002);
+        let mut doc = Document::new();
+        doc.add_root(plot);
+
+        let json = doc.to_json();
+        let root_ids_node = &json["roots"]["root_ids"];
+
+        assert!(root_ids_node.is_array());
+        let root_ids = root_ids_node.as_array().unwrap();
+        assert_eq!(root_ids.as_slice(), &["1002"]);
     }
 }

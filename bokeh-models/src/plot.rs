@@ -1,10 +1,13 @@
 use super::glyphs::Glyph;
+use super::idgen::create_id;
 use super::layout::Layout;
 use super::tools::Tool;
 use super::ColumnDataSource;
 use std::collections::HashMap;
 
-pub trait Root {}
+pub trait Root {
+    fn id(&self) -> i32;
+}
 
 #[derive(Default)]
 pub struct Plot {
@@ -12,11 +15,19 @@ pub struct Plot {
     glyphs: Vec<Box<dyn Glyph>>,
     layouts: HashMap<String, Box<dyn Layout>>,
     tools: Vec<Box<dyn Tool>>,
+    id: i32,
 }
 
 impl Plot {
     pub fn new() -> Plot {
-        Plot::default()
+        let id = create_id();
+        Plot::with_id(id)
+    }
+
+    pub(crate) fn with_id(id: i32) -> Self {
+        let mut plot = Plot::default();
+        plot.id = id;
+        plot
     }
 
     pub fn add_glyph<G>(&mut self, _source: &ColumnDataSource, glyph: G)
@@ -41,4 +52,8 @@ impl Plot {
     }
 }
 
-impl Root for Plot {}
+impl Root for Plot {
+    fn id(&self) -> i32 {
+        self.id
+    }
+}
