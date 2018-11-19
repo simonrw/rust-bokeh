@@ -33,10 +33,12 @@ impl ToBokehJs for Document {
             Some(ref root) => vec![format!("{}", root.id())],
             None => unimplemented!(),
         };
+        let references: Vec<Value> = vec![];
 
         json!({
             "roots": {
                 "root_ids": root_ids,
+                "references": references,
             },
         })
     }
@@ -59,5 +61,21 @@ mod tests {
         assert!(root_ids_node.is_array());
         let root_ids = root_ids_node.as_array().unwrap();
         assert_eq!(root_ids.as_slice(), &["1002"]);
+    }
+
+    #[test]
+    fn test_roots_have_references() {
+        let plot = Plot::with_id(1002);
+        let mut doc = Document::new();
+        doc.add_root(plot);
+
+        let json = doc.to_json();
+        let roots_node = &json["roots"];
+
+        assert!(
+            roots_node["references"].is_array(),
+            "{:#}",
+            roots_node["references"]
+        );
     }
 }
