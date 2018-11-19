@@ -1,0 +1,36 @@
+jobs:
+  check_formatting:
+    docker:
+      - image: rust:latest
+    steps:
+      - checkout
+      - run:
+          name: Check the format
+          command: |
+            rustup component add rustfmt-preview
+            ./bin/check-formatting
+
+  run_tests:
+    docker:
+      - image: rust:latest
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - rustcache
+      - run:
+          name: Tests
+          command: ./bin/test
+      - save_cache:
+          key: rustcache
+          paths:
+            - ~/.cargo
+            - target
+
+
+workflows:
+  version: 2
+  format_and_test:
+    jobs:
+      - check_formatting
+      - run_tests
