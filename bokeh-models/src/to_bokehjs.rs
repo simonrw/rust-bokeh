@@ -2,8 +2,9 @@ use serde_json::Value;
 #[cfg(test)]
 use std::fmt::Display;
 
-pub(crate) trait ToBokehJs {
+pub trait ToBokehJs {
     fn to_json(&self) -> Value;
+    fn id(&self) -> i32;
 }
 
 #[cfg(test)]
@@ -72,6 +73,10 @@ mod tests {
         impl ToBokehJs for Foo {
             fn to_json(&self) -> Value {
                 Value::Null
+            }
+
+            fn id(&self) -> i32 {
+                10
             }
         }
 

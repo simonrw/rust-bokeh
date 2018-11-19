@@ -57,6 +57,10 @@ impl ToBokehJs for Circle {
             "attributes": attributes,
         })
     }
+
+    fn id(&self) -> i32 {
+        self.id
+    }
 }
 
 #[cfg(test)]

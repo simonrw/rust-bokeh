@@ -1,13 +1,13 @@
 use super::glyphs::Glyph;
 use super::idgen::create_id;
 use super::layout::Layout;
+use super::to_bokehjs::ToBokehJs;
 use super::tools::Tool;
 use super::ColumnDataSource;
+use serde_json::Value;
 use std::collections::HashMap;
 
-pub trait Root {
-    fn id(&self) -> i32;
-}
+pub trait Root: ToBokehJs {}
 
 #[derive(Default)]
 pub struct Plot {
@@ -52,8 +52,69 @@ impl Plot {
     }
 }
 
-impl Root for Plot {
+impl Root for Plot {}
+
+impl ToBokehJs for Plot {
+    fn to_json(&self) -> Value {
+        let below_axes: Vec<_> = self
+            .layouts
+            .iter()
+            .filter(|(k, _)| *k == "below")
+            .map(|(_, v)| {
+                json!({
+                "id": format!("{}", v.id()),
+                // TODO: this must be stored on the struct
+                "type": "LinearAxis",
+            })
+            }).collect();
+        let left_axes: Vec<_> = self
+            .layouts
+            .iter()
+            .filter(|(k, _)| *k == "left")
+            .map(|(_, v)| {
+                json!({
+                "id": format!("{}", v.id()),
+                // TODO: this must be stored on the struct
+                "type": "LinearAxis",
+            })
+            }).collect();
+
+        json!({
+            "attributes": {
+                "below": below_axes,
+                "left": left_axes,
+            }
+        })
+    }
+
     fn id(&self) -> i32 {
         self.id
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::super::axes::LinearAxis;
+    use super::super::to_bokehjs::compare_json;
+    use super::super::tools::{PanTool, WheelZoomTool};
+    use super::*;
+
+    #[test]
+    fn test_serialisation_includes_layouts() {
+        let mut plot = Plot::with_id(1002);
+        plot.add_layout(LinearAxis::with_id(1006), "below");
+        plot.add_layout(LinearAxis::with_id(1007), "left");
+        plot.add_tool(PanTool::new());
+        plot.add_tool(WheelZoomTool::new());
+
+        let json = plot.to_json();
+        compare_json(
+            &json["attributes"]["below"],
+            r##"[{"id": "1006", "type": "LinearAxis"}]"##,
+        );
+        compare_json(
+            &json["attributes"]["left"],
+            r##"[{"id": "1007", "type": "LinearAxis"}]"##,
+        );
     }
 }

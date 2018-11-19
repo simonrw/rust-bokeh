@@ -44,6 +44,10 @@ impl ToBokehJs for WheelZoomTool {
             "type": "WheelZoomTool",
         })
     }
+
+    fn id(&self) -> i32 {
+        self.id
+    }
 }
 
 impl ToBokehJs for PanTool {
@@ -53,6 +57,10 @@ impl ToBokehJs for PanTool {
             "id": format!("{}", self.id),
             "type": "PanTool",
         })
+    }
+
+    fn id(&self) -> i32 {
+        self.id
     }
 }
 

@@ -14,7 +14,7 @@ impl LinearAxis {
         Self::with_id(id)
     }
 
-    fn with_id(id: i32) -> Self {
+    pub(crate) fn with_id(id: i32) -> Self {
         Self { id }
     }
 }
@@ -44,6 +44,10 @@ impl ToBokehJs for LinearAxis {
             "id": format!("{}", self.id),
             "type": "LinearAxis",
         })
+    }
+
+    fn id(&self) -> i32 {
+        self.id
     }
 }
 

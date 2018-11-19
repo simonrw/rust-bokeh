@@ -1,3 +1,4 @@
+use super::idgen::create_id;
 use super::plot::Root;
 use super::to_bokehjs::ToBokehJs;
 use serde_json::Value;
@@ -7,12 +8,20 @@ pub enum ValidationError {}
 
 #[derive(Default)]
 pub struct Document {
+    id: i32,
     root: Option<Box<dyn Root>>,
 }
 
 impl Document {
     pub fn new() -> Document {
-        Document::default()
+        let id = create_id();
+        Self::with_id(id)
+    }
+
+    fn with_id(id: i32) -> Self {
+        let mut doc = Self::default();
+        doc.id = id;
+        doc
     }
 
     pub fn add_root<R>(&mut self, root: R)
@@ -41,6 +50,10 @@ impl ToBokehJs for Document {
                 "references": references,
             },
         })
+    }
+
+    fn id(&self) -> i32 {
+        self.id
     }
 }
 
