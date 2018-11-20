@@ -70,11 +70,16 @@ impl ToBokehJs for Plot {
             .map(|(_, v)| v.to_nested_json())
             .collect();
 
+        let mut attributes = HashMap::new();
+        attributes.insert("below", json!(below_axes?));
+        attributes.insert("left", json!(left_axes?));
+
+        if let Some(min_border) = self.min_border {
+            attributes.insert("min_border", json!(min_border));
+        }
+
         Ok(json!({
-            "attributes": {
-                "below": below_axes?,
-                "left": left_axes?,
-            }
+            "attributes": attributes,
         }))
     }
 
@@ -90,15 +95,23 @@ mod tests {
     use super::super::tools::{PanTool, WheelZoomTool};
     use super::*;
 
-    #[test]
-    fn test_serialisation_includes_layouts() {
+    fn create_example_plot() -> Plot {
         let mut plot = Plot::with_id(1002);
+        plot.min_border = Some(80);
         plot.add_layout(LinearAxis::with_id(1006), "below");
         plot.add_layout(LinearAxis::with_id(1007), "left");
         plot.add_tool(PanTool::new());
         plot.add_tool(WheelZoomTool::new());
+        plot
+    }
 
-        let json = plot.to_json().unwrap();
+    fn example_json() -> Value {
+        create_example_plot().to_json().unwrap()
+    }
+
+    #[test]
+    fn test_serialisation_includes_layouts() {
+        let json = example_json();
         compare_json(
             &json["attributes"]["below"],
             r##"[{"id": "1006", "type": "LinearAxis"}]"##,
@@ -107,5 +120,11 @@ mod tests {
             &json["attributes"]["left"],
             r##"[{"id": "1007", "type": "LinearAxis"}]"##,
         );
+    }
+
+    #[test]
+    fn test_serialisation_includes_min_border() {
+        let json = example_json();
+        compare_json(&json["attributes"]["min_border"], json!(80));
     }
 }
