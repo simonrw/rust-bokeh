@@ -53,6 +53,6 @@ fn main() {
 
     let filename = "/tmp/basic_plot.html";
     let mut f = File::create(filename).expect("creating output file");
-    write!(f, "{}", file_html(&doc, "Basic Glyph Plot")).expect("writing file contents");
+    write!(f, "{}", file_html(&doc, "Basic Glyph Plot").unwrap()).expect("writing file contents");
     println!("Wrote {}", filename);
 }
