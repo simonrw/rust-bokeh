@@ -1,7 +1,7 @@
-use super::idgen::create_id;
-use super::layout::Layout;
-use super::to_bokehjs::ToBokehJs;
 use crate::errors::Result;
+use crate::idgen::create_id;
+use crate::layout::Layout;
+use crate::to_bokehjs::ToBokehJs;
 use serde_json::Value;
 
 #[derive(Clone)]
@@ -61,8 +61,8 @@ impl ToBokehJs for LinearAxis {
 
 #[cfg(test)]
 mod tests {
-    use super::super::to_bokehjs::compare_json;
     use super::*;
+    use crate::to_bokehjs::compare_json;
 
     #[test]
     fn test_linear_axis_serialisation() {

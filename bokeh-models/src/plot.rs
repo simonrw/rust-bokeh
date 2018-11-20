@@ -1,10 +1,10 @@
-use super::errors::Result;
-use super::glyphs::Glyph;
-use super::idgen::create_id;
-use super::layout::Layout;
-use super::to_bokehjs::ToBokehJs;
-use super::tools::Tool;
-use super::ColumnDataSource;
+use crate::errors::Result;
+use crate::glyphs::Glyph;
+use crate::idgen::create_id;
+use crate::layout::Layout;
+use crate::to_bokehjs::ToBokehJs;
+use crate::tools::Tool;
+use crate::ColumnDataSource;
 use serde_json::Value;
 use std::collections::HashMap;
 
@@ -90,10 +90,10 @@ impl ToBokehJs for Plot {
 
 #[cfg(test)]
 mod tests {
-    use super::super::axes::LinearAxis;
-    use super::super::to_bokehjs::compare_json;
-    use super::super::tools::{PanTool, WheelZoomTool};
     use super::*;
+    use crate::axes::LinearAxis;
+    use crate::to_bokehjs::compare_json;
+    use crate::tools::{PanTool, WheelZoomTool};
 
     fn create_example_plot() -> Plot {
         let mut plot = Plot::with_id(1002);

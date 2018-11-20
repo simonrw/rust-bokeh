@@ -1,6 +1,6 @@
-use super::idgen::create_id;
-use super::to_bokehjs::ToBokehJs;
 use crate::errors::Result;
+use crate::idgen::create_id;
+use crate::to_bokehjs::ToBokehJs;
 use serde_json::Value;
 
 pub trait Tool {}
@@ -70,8 +70,8 @@ impl Tool for WheelZoomTool {}
 
 #[cfg(test)]
 mod tests {
-    use super::super::to_bokehjs::compare_json;
     use super::*;
+    use crate::to_bokehjs::compare_json;
 
     #[test]
     fn test_wheel_zoom_tool_serialisation() {

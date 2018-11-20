@@ -1,7 +1,7 @@
-use super::errors::Result;
-use super::idgen::create_id;
-use super::plot::Root;
-use super::to_bokehjs::ToBokehJs;
+use crate::errors::Result;
+use crate::idgen::create_id;
+use crate::plot::Root;
+use crate::to_bokehjs::ToBokehJs;
 use serde_json::Value;
 
 #[derive(Debug)]
@@ -60,8 +60,8 @@ impl ToBokehJs for Document {
 
 #[cfg(test)]
 mod tests {
-    use super::super::plot::Plot;
     use super::*;
+    use crate::plot::Plot;
 
     #[test]
     fn test_document_root_ids() {

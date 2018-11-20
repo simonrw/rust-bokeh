@@ -1,6 +1,6 @@
-use super::idgen::create_id;
-use super::to_bokehjs::ToBokehJs;
 use crate::errors::Result;
+use crate::idgen::create_id;
+use crate::to_bokehjs::ToBokehJs;
 use serde_json::Value;
 use std::collections::HashMap;
 
@@ -66,8 +66,8 @@ impl ToBokehJs for Circle {
 
 #[cfg(test)]
 mod tests {
-    use super::super::to_bokehjs::compare_json;
     use super::*;
+    use crate::to_bokehjs::compare_json;
 
     #[test]
     fn test_serialisation() {
