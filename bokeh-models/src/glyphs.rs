@@ -1,5 +1,6 @@
 use super::idgen::create_id;
 use super::to_bokehjs::ToBokehJs;
+use crate::errors::Result;
 use serde_json::Value;
 use std::collections::HashMap;
 
@@ -32,7 +33,7 @@ impl Circle {
 impl Glyph for Circle {}
 
 impl ToBokehJs for Circle {
-    fn to_json(&self) -> Value {
+    fn to_json(&self) -> Result<Value> {
         let mut attributes = HashMap::new();
 
         if let Some(ref fill_color) = self.fill_color {
@@ -51,11 +52,11 @@ impl ToBokehJs for Circle {
             attributes.insert("y", json!({ "field": y }));
         }
 
-        json!({
+        Ok(json!({
             "id": format!("{}", self.id),
             "type": "Circle",
             "attributes": attributes,
-        })
+        }))
     }
 
     fn id(&self) -> i32 {
@@ -77,7 +78,7 @@ mod tests {
         circle.size = Some(5);
         circle.line_color = Some("black".to_string());
 
-        let json = circle.to_json();
+        let json = circle.to_json().unwrap();
         let expected = r##"{ "attributes": { "fill_color": { "value": "red" }, "size": { "units": "screen", "value": 5 }, "x": { "field": "x" }, "y": { "field": "y" } }, "id": "1003", "type": "Circle" }"##;
 
         compare_json(&json, expected);

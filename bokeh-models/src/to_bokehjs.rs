@@ -1,10 +1,16 @@
+use super::errors::Result;
 use serde_json::Value;
 #[cfg(test)]
 use std::fmt::Display;
 
 pub trait ToBokehJs {
-    fn to_json(&self) -> Value;
+    fn to_json(&self) -> Result<Value>;
+
     fn id(&self) -> i32;
+
+    fn to_nested_json(&self) -> Result<Value> {
+        Self::to_json(self)
+    }
 }
 
 #[cfg(test)]
@@ -71,8 +77,8 @@ mod tests {
         struct Foo;
 
         impl ToBokehJs for Foo {
-            fn to_json(&self) -> Value {
-                Value::Null
+            fn to_json(&self) -> Result<Value> {
+                Ok(Value::Null)
             }
 
             fn id(&self) -> i32 {
@@ -80,7 +86,7 @@ mod tests {
             }
         }
 
-        let json = Foo.to_json();
+        let json = Foo.to_json().unwrap();
         let json_str = serde_json::to_string(&json).unwrap();
         assert_eq!(json_str, "null");
     }

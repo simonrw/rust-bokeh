@@ -1,6 +1,7 @@
 use super::idgen::create_id;
 use super::layout::Layout;
 use super::to_bokehjs::ToBokehJs;
+use crate::errors::Result;
 use serde_json::Value;
 
 #[derive(Clone)]
@@ -22,8 +23,8 @@ impl LinearAxis {
 impl Layout for LinearAxis {}
 
 impl ToBokehJs for LinearAxis {
-    fn to_json(&self) -> Value {
-        json!({
+    fn to_json(&self) -> Result<Value> {
+        Ok(json!({
             "attributes": {
                 // TODO
                 "formatter": {
@@ -43,7 +44,14 @@ impl ToBokehJs for LinearAxis {
             },
             "id": format!("{}", self.id),
             "type": "LinearAxis",
-        })
+        }))
+    }
+
+    fn to_nested_json(&self) -> Result<Value> {
+        Ok(json!({
+            "id": format!("{}", self.id()),
+            "type": "LinearAxis",
+        }))
     }
 
     fn id(&self) -> i32 {
@@ -60,7 +68,7 @@ mod tests {
     fn test_linear_axis_serialisation() {
         let linear_axis = LinearAxis::with_id(1007);
 
-        let json = linear_axis.to_json();
+        let json = linear_axis.to_json().unwrap();
         let expected = r##"{
         "attributes": {
           "formatter": {

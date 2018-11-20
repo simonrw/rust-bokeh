@@ -1,5 +1,6 @@
 use super::idgen::create_id;
 use super::to_bokehjs::ToBokehJs;
+use crate::errors::Result;
 use serde_json::Value;
 
 pub trait Tool {}
@@ -37,12 +38,12 @@ impl WheelZoomTool {
 }
 
 impl ToBokehJs for WheelZoomTool {
-    fn to_json(&self) -> Value {
-        json!({
+    fn to_json(&self) -> Result<Value> {
+        Ok(json!({
             "attributes": {},
             "id": format!("{}", self.id),
             "type": "WheelZoomTool",
-        })
+        }))
     }
 
     fn id(&self) -> i32 {
@@ -51,12 +52,12 @@ impl ToBokehJs for WheelZoomTool {
 }
 
 impl ToBokehJs for PanTool {
-    fn to_json(&self) -> Value {
-        json!({
+    fn to_json(&self) -> Result<Value> {
+        Ok(json!({
             "attributes": {},
             "id": format!("{}", self.id),
             "type": "PanTool",
-        })
+        }))
     }
 
     fn id(&self) -> i32 {
@@ -76,7 +77,7 @@ mod tests {
     fn test_wheel_zoom_tool_serialisation() {
         let wzt = WheelZoomTool::with_id(1009);
 
-        let json = wzt.to_json();
+        let json = wzt.to_json().unwrap();
         let expected = r##"{
             "attributes": {},
             "id": "1009",
@@ -90,7 +91,7 @@ mod tests {
     fn test_pan_tool_serialisation() {
         let pt = PanTool::with_id(1008);
 
-        let json = pt.to_json();
+        let json = pt.to_json().unwrap();
         let expected = r##"{
             "attributes": {},
             "id": "1008",

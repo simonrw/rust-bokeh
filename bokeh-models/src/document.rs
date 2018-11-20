@@ -1,3 +1,4 @@
+use super::errors::Result;
 use super::idgen::create_id;
 use super::plot::Root;
 use super::to_bokehjs::ToBokehJs;
@@ -31,25 +32,25 @@ impl Document {
         self.root = Some(Box::new(root));
     }
 
-    pub fn validate(&self) -> Result<(), ValidationError> {
+    pub fn validate(&self) -> Result<()> {
         Ok(())
     }
 }
 
 impl ToBokehJs for Document {
-    fn to_json(&self) -> Value {
+    fn to_json(&self) -> Result<Value> {
         let root_ids = match self.root {
             Some(ref root) => vec![format!("{}", root.id())],
             None => unimplemented!(),
         };
         let references: Vec<Value> = vec![];
 
-        json!({
+        Ok(json!({
             "roots": {
                 "root_ids": root_ids,
                 "references": references,
             },
-        })
+        }))
     }
 
     fn id(&self) -> i32 {
@@ -68,7 +69,7 @@ mod tests {
         let mut doc = Document::new();
         doc.add_root(plot);
 
-        let json = doc.to_json();
+        let json = doc.to_json().unwrap();
         let root_ids_node = &json["roots"]["root_ids"];
 
         assert!(root_ids_node.is_array());
@@ -82,7 +83,7 @@ mod tests {
         let mut doc = Document::new();
         doc.add_root(plot);
 
-        let json = doc.to_json();
+        let json = doc.to_json().unwrap();
         let roots_node = &json["roots"];
 
         assert!(

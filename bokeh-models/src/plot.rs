@@ -1,3 +1,4 @@
+use super::errors::Result;
 use super::glyphs::Glyph;
 use super::idgen::create_id;
 use super::layout::Layout;
@@ -55,36 +56,26 @@ impl Plot {
 impl Root for Plot {}
 
 impl ToBokehJs for Plot {
-    fn to_json(&self) -> Value {
+    fn to_json(&self) -> Result<Value> {
         let below_axes: Vec<_> = self
             .layouts
             .iter()
             .filter(|(k, _)| *k == "below")
-            .map(|(_, v)| {
-                json!({
-                "id": format!("{}", v.id()),
-                // TODO: this must be stored on the struct
-                "type": "LinearAxis",
-            })
-            }).collect();
+            .map(|(_, v)| v.to_nested_json().unwrap())
+            .collect();
         let left_axes: Vec<_> = self
             .layouts
             .iter()
             .filter(|(k, _)| *k == "left")
-            .map(|(_, v)| {
-                json!({
-                "id": format!("{}", v.id()),
-                // TODO: this must be stored on the struct
-                "type": "LinearAxis",
-            })
-            }).collect();
+            .map(|(_, v)| v.to_nested_json().unwrap())
+            .collect();
 
-        json!({
+        Ok(json!({
             "attributes": {
                 "below": below_axes,
                 "left": left_axes,
             }
-        })
+        }))
     }
 
     fn id(&self) -> i32 {
@@ -107,7 +98,7 @@ mod tests {
         plot.add_tool(PanTool::new());
         plot.add_tool(WheelZoomTool::new());
 
-        let json = plot.to_json();
+        let json = plot.to_json().unwrap();
         compare_json(
             &json["attributes"]["below"],
             r##"[{"id": "1006", "type": "LinearAxis"}]"##,
