@@ -41,13 +41,13 @@ impl ToBokehJs for WheelZoomTool {
     fn to_json(&self) -> Result<Value> {
         Ok(json!({
             "attributes": {},
-            "id": format!("{}", self.id),
+            "id": self.id(),
             "type": "WheelZoomTool",
         }))
     }
 
-    fn id(&self) -> i32 {
-        self.id
+    fn id(&self) -> String {
+        format!("{}", self.id)
     }
 }
 
@@ -55,13 +55,13 @@ impl ToBokehJs for PanTool {
     fn to_json(&self) -> Result<Value> {
         Ok(json!({
             "attributes": {},
-            "id": format!("{}", self.id),
+            "id": self.id(),
             "type": "PanTool",
         }))
     }
 
-    fn id(&self) -> i32 {
-        self.id
+    fn id(&self) -> String {
+        format!("{}", self.id)
     }
 }
 

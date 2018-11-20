@@ -6,7 +6,7 @@ use std::fmt::Display;
 pub trait ToBokehJs {
     fn to_json(&self) -> Result<Value>;
 
-    fn id(&self) -> i32;
+    fn id(&self) -> String;
 
     fn to_nested_json(&self) -> Result<Value> {
         Self::to_json(self)
@@ -81,8 +81,8 @@ mod tests {
                 Ok(Value::Null)
             }
 
-            fn id(&self) -> i32 {
-                10
+            fn id(&self) -> String {
+                format!("{}", 10)
             }
         }
 

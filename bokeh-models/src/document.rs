@@ -40,7 +40,7 @@ impl Document {
 impl ToBokehJs for Document {
     fn to_json(&self) -> Result<Value> {
         let root_ids = match self.root {
-            Some(ref root) => vec![format!("{}", root.id())],
+            Some(ref root) => vec![root.id()],
             None => unimplemented!(),
         };
         let references: Vec<Value> = vec![];
@@ -53,8 +53,8 @@ impl ToBokehJs for Document {
         }))
     }
 
-    fn id(&self) -> i32 {
-        self.id
+    fn id(&self) -> String {
+        format!("{}", self.id)
     }
 }
 

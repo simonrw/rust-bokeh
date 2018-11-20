@@ -53,14 +53,14 @@ impl ToBokehJs for Circle {
         }
 
         Ok(json!({
-            "id": format!("{}", self.id),
+            "id": self.id(),
             "type": "Circle",
             "attributes": attributes,
         }))
     }
 
-    fn id(&self) -> i32 {
-        self.id
+    fn id(&self) -> String {
+        format!("{}", self.id)
     }
 }
 

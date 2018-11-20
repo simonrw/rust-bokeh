@@ -42,20 +42,20 @@ impl ToBokehJs for LinearAxis {
                     "type": "BasicTicker",
                 },
             },
-            "id": format!("{}", self.id),
+            "id": self.id(),
             "type": "LinearAxis",
         }))
     }
 
     fn to_nested_json(&self) -> Result<Value> {
         Ok(json!({
-            "id": format!("{}", self.id()),
+            "id": self.id(),
             "type": "LinearAxis",
         }))
     }
 
-    fn id(&self) -> i32 {
-        self.id
+    fn id(&self) -> String {
+        format!("{}", self.id)
     }
 }
 

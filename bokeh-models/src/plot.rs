@@ -78,8 +78,8 @@ impl ToBokehJs for Plot {
         }))
     }
 
-    fn id(&self) -> i32 {
-        self.id
+    fn id(&self) -> String {
+        format!("{}", self.id)
     }
 }
 
