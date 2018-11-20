@@ -21,7 +21,6 @@ mod tests {
     use crate::{document::Document, plot::Plot};
     use rand::distributions::Alphanumeric;
     use rand::{thread_rng, Rng};
-    use serde_json::{self, Value};
 
     #[test]
     fn test_title() {
@@ -32,8 +31,6 @@ mod tests {
         let random_string: String = thread_rng().sample_iter(&Alphanumeric).take(32).collect();
 
         let html_string = file_html(&doc, &random_string).unwrap();
-        let v: Value = serde_json::from_str(&html_string).unwrap();
-
-        assert_eq!(v["title"], random_string);
+        assert!(html_string.contains(&random_string));
     }
 }
