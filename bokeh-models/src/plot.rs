@@ -57,23 +57,23 @@ impl Root for Plot {}
 
 impl ToBokehJs for Plot {
     fn to_json(&self) -> Result<Value> {
-        let below_axes: Vec<_> = self
+        let below_axes: Result<Vec<_>> = self
             .layouts
             .iter()
             .filter(|(k, _)| *k == "below")
-            .map(|(_, v)| v.to_nested_json().unwrap())
+            .map(|(_, v)| v.to_nested_json())
             .collect();
-        let left_axes: Vec<_> = self
+        let left_axes: Result<Vec<_>> = self
             .layouts
             .iter()
             .filter(|(k, _)| *k == "left")
-            .map(|(_, v)| v.to_nested_json().unwrap())
+            .map(|(_, v)| v.to_nested_json())
             .collect();
 
         Ok(json!({
             "attributes": {
-                "below": below_axes,
-                "left": left_axes,
+                "below": below_axes?,
+                "left": left_axes?,
             }
         }))
     }
