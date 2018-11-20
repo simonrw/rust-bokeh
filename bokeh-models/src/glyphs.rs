@@ -81,6 +81,6 @@ mod tests {
         let json = circle.to_json().unwrap();
         let expected = r##"{ "attributes": { "fill_color": { "value": "red" }, "size": { "units": "screen", "value": 5 }, "x": { "field": "x" }, "y": { "field": "y" } }, "id": "1003", "type": "Circle" }"##;
 
-        compare_json(&json, expected);
+        compare_json(&json, expected).unwrap();
     }
 }

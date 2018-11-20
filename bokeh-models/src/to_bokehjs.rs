@@ -15,54 +15,56 @@ pub trait ToBokehJs {
 
 #[cfg(test)]
 pub(crate) trait ToValue {
-    fn to_value(&self) -> Value;
+    fn to_value(&self) -> Result<Value>;
 }
 
 #[cfg(test)]
 impl ToValue for Value {
-    fn to_value(&self) -> Value {
-        self.clone()
+    fn to_value(&self) -> Result<Value> {
+        Ok(self.clone())
     }
 }
 
 #[cfg(test)]
 impl<'a> ToValue for &'a Value {
-    fn to_value(&self) -> Value {
-        (*self).clone()
+    fn to_value(&self) -> Result<Value> {
+        Ok((*self).clone())
     }
 }
 
 #[cfg(test)]
 impl<'a> ToValue for &'a str {
-    fn to_value(&self) -> Value {
-        serde_json::from_str(self).unwrap()
+    fn to_value(&self) -> Result<Value> {
+        serde_json::from_str(self).map_err(From::from)
     }
 }
 
 #[cfg(test)]
 impl ToValue for String {
-    fn to_value(&self) -> Value {
-        serde_json::from_str(self).unwrap()
+    fn to_value(&self) -> Result<Value> {
+        serde_json::from_str(self).map_err(From::from)
     }
 }
 
 #[cfg(test)]
 impl<'a> ToValue for &'a String {
-    fn to_value(&self) -> Value {
-        serde_json::from_str(self).unwrap()
+    fn to_value(&self) -> Result<Value> {
+        serde_json::from_str(self).map_err(From::from)
     }
 }
 
 // Helper function to compare JSON strings
 #[cfg(test)]
-pub(crate) fn compare_json<A, B>(s1: A, s2: B)
+#[must_use]
+pub(crate) fn compare_json<A, B>(s1: A, s2: B) -> Result<()>
 where
     A: ToValue + Display,
     B: ToValue + Display,
 {
-    let v1: Value = s1.to_value();
-    let v2: Value = s2.to_value();
+    let v1: Value = s1.to_value()?;
+    let v2: Value = s2.to_value()?;
     assert!(v1 == v2, "\n{:#}\nIS NOT EQUAL TO\n{:#}", v1, v2);
+    Ok(())
 }
 
 #[cfg(test)]

@@ -84,7 +84,7 @@ mod tests {
             "type": "WheelZoomTool"
         }"##;
 
-        compare_json(&json, expected);
+        compare_json(&json, expected).unwrap();
     }
 
     #[test]
@@ -98,6 +98,6 @@ mod tests {
             "type": "PanTool"
         }"##;
 
-        compare_json(&json, expected);
+        compare_json(&json, expected).unwrap();
     }
 }

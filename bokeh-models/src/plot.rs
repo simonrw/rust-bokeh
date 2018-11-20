@@ -115,16 +115,16 @@ mod tests {
         compare_json(
             &json["attributes"]["below"],
             r##"[{"id": "1006", "type": "LinearAxis"}]"##,
-        );
+        ).unwrap();
         compare_json(
             &json["attributes"]["left"],
             r##"[{"id": "1007", "type": "LinearAxis"}]"##,
-        );
+        ).unwrap();
     }
 
     #[test]
     fn test_serialisation_includes_min_border() {
         let json = example_json();
-        compare_json(&json["attributes"]["min_border"], json!(80));
+        compare_json(&json["attributes"]["min_border"], json!(80)).unwrap();
     }
 }

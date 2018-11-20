@@ -88,6 +88,6 @@ mod tests {
         "type": "LinearAxis"
       }"##;
 
-        compare_json(&json, expected);
+        compare_json(&json, expected).unwrap();
     }
 }

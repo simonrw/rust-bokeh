@@ -1,12 +1,15 @@
 use crate::document::Document;
 use crate::errors::Result;
 use crate::to_bokehjs::ToBokehJs;
+use failure::format_err;
 
 pub fn file_html(document: &Document, title: &str) -> Result<String> {
     let mut json = document.to_json()?;
 
     // Add the title
-    let obj = json.as_object_mut().unwrap();
+    let obj = json
+        .as_object_mut()
+        .ok_or_else(|| format_err!("node is not an object"))?;
     obj.insert(String::from("title"), json!(title));
 
     Ok(format!("{}", json!(obj)))
