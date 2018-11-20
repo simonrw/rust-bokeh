@@ -2,8 +2,10 @@
 
 set -ex
 
+RUST_VERSION=${TEST_RUST_VERSION:-stable}
+
 main() {
-    cargo test --all
+    cargo +${RUST_VERSION} test --all
 }
 
 main

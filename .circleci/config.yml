@@ -10,27 +10,51 @@ jobs:
             rustup component add rustfmt-preview
             ./bin/check-formatting
 
-  run_tests:
+  run_tests_stable:
     docker:
       - image: rust:latest
+    environment:
+      TEST_RUST_VERSION: stable
     steps:
       - checkout
       - restore_cache:
           keys:
-            - rustcache
+            - rustcache-stable
       - run:
           name: Tests
           command: ./bin/test
       - save_cache:
-          key: rustcache
+          key: rustcache-stable
           paths:
             - ~/.cargo
             - target
 
+  run_tests_nightly:
+    docker:
+      - image: rust:latest
+    environment:
+      TEST_RUST_VERSION: nightly
+    steps:
+      - checkout
+      - run:
+          name: Install nightly
+          command: rustup install nightly
+      - restore_cache:
+          keys:
+            - rustcache-nightly
+      - run:
+          name: Tests
+          command: ./bin/test
+      - save_cache:
+          key: rustcache-nightly
+          paths:
+            - ~/.cargo
+            - target
 
 workflows:
   version: 2
   format_and_test:
     jobs:
       - check_formatting
-      - run_tests
+      - run_tests_stable
+      - run_tests_nightly
