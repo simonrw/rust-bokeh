@@ -17,6 +17,9 @@ jobs:
       TEST_RUST_VERSION: stable
     steps:
       - checkout
+      - run:
+          name: Install stable
+          command: rustup install stable
       - restore_cache:
           keys:
             - rustcache-stable
