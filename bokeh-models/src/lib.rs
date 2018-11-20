@@ -1,5 +1,6 @@
 #[macro_use]
 extern crate serde_json;
+extern crate failure;
 #[cfg(test)]
 extern crate rand;
 
