@@ -1,7 +1,34 @@
+use askama::Template;
 use crate::document::Document;
 use crate::errors::Result;
 use crate::to_bokehjs::ToBokehJs;
 use failure::format_err;
+use serde_json::Value;
+
+type Guid = String;
+
+// Rendering the output HTML
+#[derive(Template)]
+#[template(path = "index.html")]
+struct PageTemplate {
+    doc_id: Guid,
+    placeholder_id: u64,
+    plot_data: String,
+    plot_id: u64,
+    plot_guid: Guid,
+}
+
+fn render_html_and_embed_json(doc: Value) -> Result<String> {
+    let page_template = PageTemplate {
+        doc_id: "525559c6-ff05-4b07-a440-71d3780e6d1d".to_string(),
+        placeholder_id: 1112,
+        plot_id: 1001,
+        plot_guid: "398f0a3d-51fc-4aff-9df6-e569ebbc486e".to_string(),
+        plot_data: format!("{}", doc),
+    };
+
+    Ok(format!("{}", page_template.render()?))
+}
 
 pub fn file_html(document: &Document, title: &str) -> Result<String> {
     let mut json = document.to_json()?;
@@ -12,7 +39,7 @@ pub fn file_html(document: &Document, title: &str) -> Result<String> {
         .ok_or_else(|| format_err!("node is not an object"))?;
     obj.insert(String::from("title"), json!(title));
 
-    Ok(format!("{}", json!(obj)))
+    render_html_and_embed_json(json!(obj))
 }
 
 #[cfg(test)]
