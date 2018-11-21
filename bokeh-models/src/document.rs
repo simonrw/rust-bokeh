@@ -8,12 +8,11 @@ use serde_json::Value;
 #[derive(Debug)]
 pub enum ValidationError {}
 
-#[derive(Default)]
 pub struct Document {
     id: i32,
     root: Option<Box<dyn Root>>,
-    xscale: Option<Box<dyn Scale>>,
-    yscale: Option<Box<dyn Scale>>,
+    xscale: Box<dyn Scale>,
+    yscale: Box<dyn Scale>,
 }
 
 impl Document {
@@ -23,13 +22,12 @@ impl Document {
     }
 
     fn with_id(id: i32) -> Self {
-        let mut doc = Self::default();
-        doc.id = id;
-
-        // Add defaults
-        doc.xscale = Some(Box::new(LinearScale::new()));
-        doc.yscale = Some(Box::new(LinearScale::new()));
-        doc
+        Document {
+            id,
+            root: None,
+            xscale: Box::new(LinearScale::new()),
+            yscale: Box::new(LinearScale::new()),
+        }
     }
 
     pub fn add_root<R>(&mut self, root: R)
@@ -50,10 +48,8 @@ impl ToBokehJs for Document {
             Some(ref root) => vec![root.id()],
             None => unimplemented!(),
         };
-        let references: Vec<Value> = vec![
-            self.xscale.as_ref().unwrap().to_nested_json()?,
-            self.yscale.as_ref().unwrap().to_nested_json()?,
-        ];
+        let references: Vec<Value> =
+            vec![self.xscale.to_nested_json()?, self.yscale.to_nested_json()?];
 
         Ok(json!({
             "roots": {
@@ -104,20 +100,12 @@ mod tests {
     }
 
     #[test]
-    fn test_document_has_linear_scales_by_default() {
-        let doc = Document::new();
-
-        assert!(doc.xscale.is_some());
-        assert!(doc.yscale.is_some());
-    }
-
-    #[test]
     fn test_document_outputs_linear_scales() {
         let plot = Plot::with_id(1002);
         let mut doc = Document::new();
 
-        let x_id = doc.xscale.as_ref().unwrap().id();
-        let y_id = doc.yscale.as_ref().unwrap().id();
+        let x_id = doc.xscale.id();
+        let y_id = doc.yscale.id();
 
         doc.add_root(plot);
 
