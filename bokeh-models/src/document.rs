@@ -1,6 +1,7 @@
 use crate::errors::Result;
 use crate::idgen::create_id;
 use crate::plot::Root;
+use crate::scales::{LinearScale, Scale};
 use crate::to_bokehjs::ToBokehJs;
 use serde_json::Value;
 
@@ -11,6 +12,8 @@ pub enum ValidationError {}
 pub struct Document {
     id: i32,
     root: Option<Box<dyn Root>>,
+    xscale: Option<Box<dyn Scale>>,
+    yscale: Option<Box<dyn Scale>>,
 }
 
 impl Document {
@@ -22,6 +25,10 @@ impl Document {
     fn with_id(id: i32) -> Self {
         let mut doc = Self::default();
         doc.id = id;
+
+        // Add defaults
+        doc.xscale = Some(Box::new(LinearScale::new()));
+        doc.yscale = Some(Box::new(LinearScale::new()));
         doc
     }
 
@@ -43,7 +50,10 @@ impl ToBokehJs for Document {
             Some(ref root) => vec![root.id()],
             None => unimplemented!(),
         };
-        let references: Vec<Value> = vec![];
+        let references: Vec<Value> = vec![
+            self.xscale.as_ref().unwrap().to_nested_json()?,
+            self.yscale.as_ref().unwrap().to_nested_json()?,
+        ];
 
         Ok(json!({
             "roots": {
@@ -91,5 +101,48 @@ mod tests {
             "{:#}",
             roots_node["references"]
         );
+    }
+
+    #[test]
+    fn test_document_has_linear_scales_by_default() {
+        let doc = Document::new();
+
+        assert!(doc.xscale.is_some());
+        assert!(doc.yscale.is_some());
+    }
+
+    #[test]
+    fn test_document_outputs_linear_scales() {
+        let plot = Plot::with_id(1002);
+        let mut doc = Document::new();
+
+        let x_id = doc.xscale.as_ref().unwrap().id();
+        let y_id = doc.yscale.as_ref().unwrap().id();
+
+        doc.add_root(plot);
+
+        let json = doc.to_json().unwrap();
+        let references = &json["roots"]["references"];
+        println!("{}", json);
+        assert!(references.is_array());
+        let references = references.as_array().unwrap();
+
+        let mut xfound = false;
+        let mut yfound = false;
+        for reference in references {
+            assert!(reference.is_object());
+            let ref_type = reference.get("type").as_ref().unwrap().as_str().unwrap();
+            let ref_id = reference.get("id").as_ref().unwrap().as_str().unwrap();
+
+            if ref_id == x_id {
+                xfound = true;
+                assert_eq!(ref_type, "LinearScale");
+            } else if ref_id == y_id {
+                yfound = true;
+                assert_eq!(ref_type, "LinearScale");
+            }
+        }
+
+        assert!(xfound && yfound);
     }
 }
