@@ -2,6 +2,7 @@
 extern crate serde_json;
 extern crate askama;
 extern crate failure;
+extern crate lazy_static;
 #[cfg(test)]
 extern crate rand;
 
