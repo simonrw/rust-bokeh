@@ -1,7 +1,7 @@
 use crate::errors::Result;
 use crate::glyphs::Glyph;
 use crate::idgen::create_id;
-use crate::layout::Layout;
+use crate::layouts::Layout;
 use crate::to_bokehjs::ToBokehJs;
 use crate::tools::Tool;
 use crate::ColumnDataSource;
