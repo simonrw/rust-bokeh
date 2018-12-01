@@ -1,7 +1,8 @@
 # rust-bokeh
 
 [![CircleCI](https://circleci.com/gh/mindriot101/rust-bokeh/tree/dev.svg?style=svg)](https://circleci.com/gh/mindriot101/rust-bokeh/tree/dev)
-[![Join the chat at https://gitter.im/rust-bokeh/Lobby](https://badges.gitter.im/rust-bokeh/Lobby.svg)](https://gitter.im/rust-bokeh/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/rust-bokeh)
+
 
 Bokeh-compatible Rust plotting library
 
