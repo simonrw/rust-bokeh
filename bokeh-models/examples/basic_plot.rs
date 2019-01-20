@@ -1,3 +1,4 @@
+/*  TODO
 extern crate bokeh_models;
 
 use bokeh_models::document::Document;
@@ -25,34 +26,35 @@ fn main() {
         "y" => y,
     };
     */
+let mut plot = Plot::new();
+plot.min_border = Some(80);
 
-    let mut plot = Plot::new();
-    plot.min_border = Some(80);
+let mut circle = Circle::new();
+circle.x = Some("x".to_string());
+circle.y = Some("y".to_string());
+circle.fill_color = Some("red".to_string());
+circle.size = Some(5);
+circle.line_color = Some("black".to_string());
 
-    let mut circle = Circle::new();
-    circle.x = Some("x".to_string());
-    circle.y = Some("y".to_string());
-    circle.fill_color = Some("red".to_string());
-    circle.size = Some(5);
-    circle.line_color = Some("black".to_string());
+plot.add_glyph(&source, circle);
 
-    plot.add_glyph(&source, circle);
+plot.add_layout(LinearAxis::new(), "below");
+plot.add_layout(LinearAxis::new(), "left");
 
-    plot.add_layout(LinearAxis::new(), "below");
-    plot.add_layout(LinearAxis::new(), "left");
+plot.add_tool(PanTool::new());
+plot.add_tool(WheelZoomTool::new());
 
-    plot.add_tool(PanTool::new());
-    plot.add_tool(WheelZoomTool::new());
+let mut doc = Document::new();
+doc.add_root(plot);
 
-    let mut doc = Document::new();
-    doc.add_root(plot);
-
-    if let Err(e) = doc.validate() {
-        panic!("Error validating plot: {:?}", e);
-    }
-
-    let filename = "/tmp/basic_plot.html";
-    let mut f = File::create(filename).expect("creating output file");
-    write!(f, "{}", file_html(&doc, "Basic Glyph Plot").unwrap()).expect("writing file contents");
-    println!("Wrote {}", filename);
+if let Err(e) = doc.validate() {
+panic!("Error validating plot: {:?}", e);
 }
+
+let filename = "/tmp/basic_plot.html";
+let mut f = File::create(filename).expect("creating output file");
+write!(f, "{}", file_html(&doc, "Basic Glyph Plot").unwrap()).expect("writing file contents");
+println!("Wrote {}", filename);
+}
+*/
+fn main() {}
