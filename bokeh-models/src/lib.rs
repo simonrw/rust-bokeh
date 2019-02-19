@@ -1,15 +1,31 @@
+//! Rust implementation of the client-side portion of Bokeh.
+
+#![deny(missing_docs)]
+
 use serde_json::{json, to_string, Result, Value};
 
+/// Trait encoding the ability to transform the type into their Bokeh representation
 pub trait ToBokeh {
+    /// Compulsory method for converting Bokeh model into serializable JSON
+    ///
+    /// This must be implemented by any struct that is to be converted to Bokeh type, and sent to
+    /// BokehJS in the browser
     fn as_bokeh_value(&self) -> Value;
+
+    /// Convert a bokeh struct to string
+    ///
+    /// Automatically implemented for objects based on their `ToBokeh::as_bokeh_value`
+    /// implementation.
     fn as_string(&self) -> Result<String> {
-        to_string(&self.as_bokeh_value())
+        to_string(&ToBokeh::as_bokeh_value(self))
     }
 }
 
+/// Struct dealing with basic tick formatting.
 pub struct BasicTickFormatter;
 
 impl BasicTickFormatter {
+    /// Create a new BasicTickFormatter
     pub fn new() -> BasicTickFormatter {
         BasicTickFormatter {}
     }
