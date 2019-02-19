@@ -1,14 +1,12 @@
-use serde_derive::Serialize;
 use serde_json::{json, to_string, Result, Value};
 
-pub trait ToBokeh: serde::Serialize {
+pub trait ToBokeh {
     fn as_bokeh_value(&self) -> Value;
     fn as_string(&self) -> Result<String> {
-        to_string(self)
+        to_string(&self.as_bokeh_value())
     }
 }
 
-#[derive(Serialize)]
 pub struct BasicTickFormatter;
 
 impl BasicTickFormatter {
