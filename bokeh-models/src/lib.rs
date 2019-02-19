@@ -1,8 +1,11 @@
 use serde_derive::Serialize;
-use serde_json::{json, Value};
+use serde_json::{json, to_string, Result, Value};
 
 pub trait ToBokeh: serde::Serialize {
-    fn to_bokeh_value(self) -> Value;
+    fn as_bokeh_value(&self) -> Value;
+    fn as_string(&self) -> Result<String> {
+        to_string(self)
+    }
 }
 
 #[derive(Serialize)]
@@ -15,7 +18,7 @@ impl BasicTickFormatter {
 }
 
 impl ToBokeh for BasicTickFormatter {
-    fn to_bokeh_value(self) -> Value {
+    fn as_bokeh_value(&self) -> Value {
         json!({
             "attributes": {},
             "type": "BasicTickFormatter",
@@ -53,7 +56,7 @@ mod tests {
     #[test]
     fn test_basic_tick_formatter() {
         let tf = BasicTickFormatter::new();
-        let json_value: Value = tf.to_bokeh_value();
+        let json_value: Value = tf.as_bokeh_value();
         assert_without_id_equal!(
             json_value,
             json!({
