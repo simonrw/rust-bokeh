@@ -21,6 +21,29 @@ pub trait ToBokeh {
     }
 }
 
+// BasicTicker
+
+/// Struct representing ticks
+pub struct BasicTicker;
+
+impl BasicTicker {
+    /// Create a new BasicTicker
+    pub fn new() -> BasicTicker {
+        BasicTicker {}
+    }
+}
+
+impl ToBokeh for BasicTicker {
+    fn as_bokeh_value(&self) -> Value {
+        json!({
+            "attributes": {},
+            "type": "BasicTicker",
+        })
+    }
+}
+
+// Basic tick formatter
+
 /// Struct dealing with basic tick formatting.
 pub struct BasicTickFormatter;
 
@@ -67,6 +90,8 @@ mod tests {
         };
     }
 
+    // TODO: test ids somehow
+
     #[test]
     fn test_basic_tick_formatter() {
         let tf = BasicTickFormatter::new();
@@ -76,6 +101,19 @@ mod tests {
             json!({
                 "attributes": {},
                 "type": "BasicTickFormatter",
+            })
+        );
+    }
+
+    #[test]
+    fn test_basic_ticker() {
+        let tf = BasicTicker::new();
+        let json_value: Value = tf.as_bokeh_value();
+        assert_without_id_equal!(
+            json_value,
+            json!({
+                "attributes": {},
+                "type": "BasicTicker",
             })
         );
     }
