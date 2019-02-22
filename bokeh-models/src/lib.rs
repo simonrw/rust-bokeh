@@ -215,6 +215,7 @@ impl<'s> Document<'s> {
 
     /// Check the document is sane
     pub fn validate(&self) -> Result<(), ()> {
+        // TODO
         Ok(())
     }
 }
