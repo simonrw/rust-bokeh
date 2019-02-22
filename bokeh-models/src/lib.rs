@@ -2,9 +2,11 @@
 
 #![deny(missing_docs)]
 
+use failure::format_err;
 use serde_json::{json, to_string, Value};
 use std::collections::HashMap;
-use std::path::Path;
+
+type Result<T> = std::result::Result<T, failure::Error>;
 
 /// Trait encoding the ability to transform the type into their Bokeh representation
 pub trait ToBokeh {
@@ -214,18 +216,53 @@ impl<'s> Document<'s> {
     }
 
     /// Check the document is sane
-    pub fn validate(&self) -> Result<(), ()> {
-        // TODO
-        Ok(())
+    pub fn validate(self) -> Result<ValidatedDocument<'s>> {
+        let plot = self.plot.ok_or(format_err!("document requires a plot"))?;
+
+        Ok(ValidatedDocument { plot })
+    }
+}
+
+/// Represents a valid document
+pub struct ValidatedDocument<'s> {
+    plot: Plot<'s>,
+}
+
+impl<'s> ValidatedDocument<'s> {
+    /// Get the references of all sub-objects to put into the JSON graph
+    pub fn references(&self) -> Vec<Box<ToBokeh>> {
+        let mut out = Vec::new();
+        out
     }
 }
 
 /// Write a document to a file at path `path`
-pub fn file_html<P>(_doc: &Document, _path: P) -> Result<String, ()>
+pub fn file_html<S>(_doc: &Document, _title: S) -> Result<String>
 where
-    P: AsRef<Path>,
+    S: Into<String>,
 {
     unimplemented!()
+}
+
+/// Return the JSON representation as a serde_json::Value
+pub fn to_bokeh_json<S>(doc: &ValidatedDocument, title: S) -> Result<Value>
+where
+    S: Into<String>,
+{
+    let references: Vec<Value> = doc
+        .references()
+        .into_iter()
+        .map(|r| r.as_bokeh_value())
+        .collect();
+
+    let out = json!({
+        "roots": {
+            "references": references,
+        },
+        "title": title.into(),
+        "version": "1.0.3",
+    });
+    Ok(out)
 }
 
 #[cfg(test)]
