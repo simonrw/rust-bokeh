@@ -1,4 +1,3 @@
--e git+https://github.com/bokeh/bokeh.git@f04830b6a62b91133655857ee14d88438df2febc#egg=bokeh&subdirectory=../../bokeh-src
 Jinja2==2.10
 MarkupSafe==1.1.0
 numpy==1.15.4
@@ -6,6 +5,6 @@ packaging==18.0
 Pillow==5.4.0
 pyparsing==2.3.0
 python-dateutil==2.7.5
-PyYAML==3.13
+PyYAML>=4.2b1
 six==1.12.0
 tornado==5.1.1
