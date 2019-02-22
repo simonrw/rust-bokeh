@@ -54,6 +54,12 @@ impl ColumnDataSource {
     }
 }
 
+impl ToBokeh for ColumnDataSource {
+    fn as_bokeh_value(&self) -> Value {
+        json!(null)
+    }
+}
+
 // Plot
 
 /// Position for layout
@@ -109,6 +115,30 @@ impl<'s> Plot<'s> {
     pub fn add_tool(&mut self, tool: Tool) {
         self.tools.push(tool);
     }
+
+    /// Validate the plot for rendering
+    pub fn validate(self) -> Result<ValidatedPlot<'s>> {
+        let source = self
+            .source
+            .ok_or(format_err!("no ColumnDataSource found"))?;
+        Ok(ValidatedPlot {
+            min_border: self.min_border,
+            source,
+            glyphs: self.glyphs,
+            layouts: self.layouts,
+            tools: self.tools,
+        })
+    }
+}
+
+/// Plot that has passed validations
+pub struct ValidatedPlot<'s> {
+    /// Minimum border width
+    pub min_border: Option<u32>,
+    source: &'s ColumnDataSource,
+    glyphs: Vec<Box<Glyph>>,
+    layouts: HashMap<Position, Layout>,
+    tools: Vec<Tool>,
 }
 
 // Circle
@@ -217,7 +247,10 @@ impl<'s> Document<'s> {
 
     /// Check the document is sane
     pub fn validate(self) -> Result<ValidatedDocument<'s>> {
-        let plot = self.plot.ok_or(format_err!("document requires a plot"))?;
+        let plot = self
+            .plot
+            .ok_or(format_err!("document requires a plot"))?
+            .validate()?;
 
         Ok(ValidatedDocument { plot })
     }
@@ -225,13 +258,14 @@ impl<'s> Document<'s> {
 
 /// Represents a valid document
 pub struct ValidatedDocument<'s> {
-    plot: Plot<'s>,
+    plot: ValidatedPlot<'s>,
 }
 
 impl<'s> ValidatedDocument<'s> {
     /// Get the references of all sub-objects to put into the JSON graph
-    pub fn references(&self) -> Vec<Box<ToBokeh>> {
+    pub fn references(&self) -> Vec<Value> {
         let mut out = Vec::new();
+        out.push(self.plot.source.as_bokeh_value());
         out
     }
 }
@@ -249,11 +283,7 @@ pub fn to_bokeh_json<S>(doc: &ValidatedDocument, title: S) -> Result<Value>
 where
     S: Into<String>,
 {
-    let references: Vec<Value> = doc
-        .references()
-        .into_iter()
-        .map(|r| r.as_bokeh_value())
-        .collect();
+    let references: Vec<Value> = doc.references();
 
     let out = json!({
         "roots": {

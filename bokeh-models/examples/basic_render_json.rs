@@ -45,13 +45,9 @@ fn main() {
     match doc.validate() {
         Ok(doc) => {
             let filename = "/tmp/basic_plot.json";
-            fs::write(
-                filename,
-                to_bokeh_json(&doc, "Basic plot")
-                    .expect("creating json value")
-                    .to_string(),
-            )
-            .expect("writing file contents");
+            let json_rep = to_bokeh_json(&doc, "Basic plot").expect("creating json value");
+            println!("Got json representation: {}", json_rep);
+            fs::write(filename, json_rep.to_string()).expect("writing file contents");
         }
         Err(e) => panic!("Error validating plot: {:?}", e),
     }
