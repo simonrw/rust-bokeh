@@ -1,7 +1,6 @@
 use bokeh_models::*;
 use std::f64::consts;
-use std::fs::File;
-use std::io::Write;
+use std::fs;
 
 fn main() {
     // Build the data set
@@ -46,6 +45,6 @@ fn main() {
     }
 
     let filename = "/tmp/basic_plot.html";
-    let mut f = File::create(filename).expect("creating output file");
-    write!(f, "{}", file_html(&doc, "Basic Glyph Plot").unwrap()).expect("writing file contents");
+    fs::write(filename, file_html(&doc, "Basic Glyph Plot").unwrap())
+        .expect("writing file contents");
 }
