@@ -40,11 +40,12 @@ fn main() {
     let mut doc = Document::new();
     doc.add_root(plot);
 
-    if let Err(e) = doc.validate() {
-        panic!("Error validating plot: {:?}", e);
+    match doc.validate() {
+        Ok(doc) => {
+            let filename = "/tmp/basic_plot.json";
+            let html_rep = file_html(&doc, "Basic plot").expect("creating html content");
+            fs::write(filename, html_rep).expect("writing file contents");
+        }
+        Err(e) => panic!("Error validating plot: {:?}", e),
     }
-
-    let filename = "/tmp/basic_plot.html";
-    fs::write(filename, file_html(&doc, "Basic Glyph Plot").unwrap())
-        .expect("writing file contents");
 }
