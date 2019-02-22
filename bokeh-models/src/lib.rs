@@ -224,7 +224,7 @@ pub fn file_html<P>(_doc: &Document, _path: P) -> Result<String, ()>
 where
     P: AsRef<Path>,
 {
-    Ok("".to_string())
+    unimplemented!()
 }
 
 #[cfg(test)]
