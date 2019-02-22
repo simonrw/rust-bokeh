@@ -25,11 +25,6 @@ pub trait ToBokeh {
     }
 }
 
-// Marker traits
-
-/// Marker trait representing glyphs
-pub trait Glyph {}
-
 // ColumnDataSource
 
 /// Column data source for handling columar data
@@ -80,7 +75,7 @@ pub struct Plot<'s> {
     /// Minimum border width
     pub min_border: Option<u32>,
     source: Option<&'s ColumnDataSource>,
-    glyphs: Vec<Box<Glyph>>,
+    glyphs: Vec<Glyph>,
     layouts: HashMap<Position, Layout>,
     tools: Vec<Tool>,
 }
@@ -100,20 +95,26 @@ impl<'s> Plot<'s> {
     /// Add a glyph to the plot
     pub fn add_glyph<G>(&mut self, source: &'s ColumnDataSource, glyph: G)
     where
-        G: Glyph + 'static,
+        G: Into<Glyph>,
     {
         self.source = Some(source);
-        self.glyphs.push(Box::new(glyph));
+        self.glyphs.push(glyph.into());
     }
 
     /// Add a layout to the plot
-    pub fn add_layout(&mut self, position: Position, layout: Layout) {
-        self.layouts.insert(position, layout);
+    pub fn add_layout<L>(&mut self, position: Position, layout: L)
+    where
+        L: Into<Layout>,
+    {
+        self.layouts.insert(position, layout.into());
     }
 
     /// Add a tool to the plot
-    pub fn add_tool(&mut self, tool: Tool) {
-        self.tools.push(tool);
+    pub fn add_tool<T>(&mut self, tool: T)
+    where
+        T: Into<Tool>,
+    {
+        self.tools.push(tool.into());
     }
 
     /// Validate the plot for rendering
@@ -136,12 +137,18 @@ pub struct ValidatedPlot<'s> {
     /// Minimum border width
     pub min_border: Option<u32>,
     source: &'s ColumnDataSource,
-    glyphs: Vec<Box<Glyph>>,
+    glyphs: Vec<Glyph>,
     layouts: HashMap<Position, Layout>,
     tools: Vec<Tool>,
 }
 
-// Circle
+// Glyphs
+
+/// Represents all available glyphs
+pub enum Glyph {
+    /// Circle type
+    Circle(Circle),
+}
 
 /// Circle marker
 #[derive(Default)]
@@ -165,7 +172,11 @@ impl Circle {
     }
 }
 
-impl Glyph for Circle {}
+impl From<Circle> for Glyph {
+    fn from(c: Circle) -> Glyph {
+        Glyph::Circle(c)
+    }
+}
 
 // Layout
 
@@ -271,7 +282,7 @@ impl<'s> ValidatedDocument<'s> {
 }
 
 /// Write a document to a file at path `path`
-pub fn file_html<S>(_doc: &Document, _title: S) -> Result<String>
+pub fn file_html<S>(_doc: &ValidatedDocument, _title: S) -> Result<String>
 where
     S: Into<String>,
 {
